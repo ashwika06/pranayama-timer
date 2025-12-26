@@ -2,7 +2,9 @@
    Service Worker
 ========================= */
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch(err => console.error("Service Worker registration failed:", err));
 }
 
 /* =========================
@@ -14,19 +16,40 @@ let timerInterval = null;
 let isStopped = false;
 
 /* =========================
+   Load / Save Data
+========================= */
+function saveData() {
+  localStorage.setItem("pranayamas", JSON.stringify(pranayamas));
+}
+
+function loadData() {
+  const saved = localStorage.getItem("pranayamas");
+  if (saved) {
+    pranayamas = JSON.parse(saved);
+    renderList();
+  }
+}
+
+window.onload = loadData;
+
+/* =========================
    Add / Delete
 ========================= */
 function addPranayama() {
-  const name = document.getElementById("name").value;
+  const name = document.getElementById("name").value.trim();
   const min = parseInt(document.getElementById("min").value || 0);
   const sec = parseInt(document.getElementById("sec").value || 0);
-
   const totalSeconds = min * 60 + sec;
+
   if (!name || totalSeconds <= 0) return;
 
   pranayamas.push({ name, duration: totalSeconds });
   saveData();
   renderList();
+
+  document.getElementById("name").value = "";
+  document.getElementById("min").value = "";
+  document.getElementById("sec").value = "";
 }
 
 function deletePranayama(index) {
@@ -66,6 +89,7 @@ function stopSession() {
   clearInterval(timerInterval);
   document.getElementById("current").textContent = "Stopped";
   document.getElementById("timer").textContent = "";
+  document.getElementById("nextCountdown").textContent = "";
 }
 
 /* =========================
@@ -77,6 +101,8 @@ function runPranayama(index) {
   if (index >= pranayamas.length) {
     document.getElementById("current").textContent = "Session Complete 🙏";
     document.getElementById("timer").textContent = "";
+    document.getElementById("nextCountdown").textContent = "";
+    playBell();
     return;
   }
 
@@ -85,7 +111,7 @@ function runPranayama(index) {
   startTimer(pranayamas[index].duration, () => {
     if (index < pranayamas.length - 1) {
       document.getElementById("current").textContent = "Cooldown";
-      startTimer(cooldownTime, () => runPranayama(index + 1));
+      startTimer(cooldownTime, () => runPranayama(index + 1), true); // show live countdown
     } else {
       runPranayama(index + 1);
     }
@@ -95,9 +121,14 @@ function runPranayama(index) {
 /* =========================
    Timer
 ========================= */
-function startTimer(seconds, callback) {
+function startTimer(seconds, callback, showNext = false) {
   let time = seconds;
   clearInterval(timerInterval);
+
+  if (seconds <= 0) {
+    callback();
+    return;
+  }
 
   timerInterval = setInterval(() => {
     if (isStopped) {
@@ -105,7 +136,16 @@ function startTimer(seconds, callback) {
       return;
     }
 
-    document.getElementById("timer").textContent = formatTime(time);
+    const timeStr = formatTime(time);
+    document.getElementById("timer").textContent = timeStr;
+
+    // Show live countdown if required
+    if (showNext) {
+      document.getElementById("nextCountdown").textContent = `Next in: ${timeStr}`;
+    } else {
+      document.getElementById("nextCountdown").textContent = "";
+    }
+
     time--;
 
     if (time < 0) {
@@ -114,4 +154,29 @@ function startTimer(seconds, callback) {
       callback();
     }
   }, 1000);
+}
+
+/* =========================
+   Helpers
+========================= */
+function formatTime(sec) {
+  const m = Math.floor(sec / 60).toString().padStart(2, "0");
+  const s = (sec % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+function notifyEnd() {
+  playBell();
+}
+
+function playBell() {
+  const bell = document.getElementById("bell");
+  if (bell) bell.play().catch(() => {});
+}
+
+/* =========================
+   Meditation Mode
+========================= */
+function toggleMeditationMode() {
+  document.body.classList.toggle("meditation");
 }

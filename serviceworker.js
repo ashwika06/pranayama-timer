@@ -1,7 +1,7 @@
 const CACHE_NAME = "pranayama-v1";
 const FILES = [
   "./",
-  "./pranayama.html",
+  "./index.html",
   "./pranayama.css",
   "./app.js",
   "./manifest.json"
