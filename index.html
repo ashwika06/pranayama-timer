@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pranayama Timer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="pranayama.css">
+  <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+
+<h2>Pranayama Timer</h2>
+
+<div class="add-form">
+  <input id="name" placeholder="Name">
+  <input id="min" type="number" placeholder="Min">
+  <input id="sec" type="number" placeholder="Sec">
+  <button onclick="addPranayama()">Add</button>
+</div>
+
+<div class="cooldown">
+  Cooldown (sec):
+  <input id="cooldown" type="number" value="30">
+</div>
+
+<ul id="list"></ul>
+
+<div class="controls">
+  <button onclick="startSession()">START</button>
+  <button class="stop" onclick="stopSession()">STOP</button>
+</div>
+
+<button onclick="toggleMeditationMode()">Meditation Mode</button>
+
+
+<h3 id="current"></h3>
+<h1 id="timer"></h1>
+
+<script src="app.js"></script>
+
+<audio id="bell" src="https://actions.google.com/sounds/v1/alarms/medium_bell_ringing_near.ogg"></audio>
+</body>
+</html>

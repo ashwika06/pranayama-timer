@@ -1,0 +1,191 @@
+/* 🌿 Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "DM Sans", system-ui, sans-serif;
+  background: linear-gradient(180deg, #f7fdfb, #e9f5f1);
+  min-height: 100vh;
+  padding: 20px;
+  color: #422f4f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 🌸 Title */
+h2 {
+  font-family: "Playfair Display", serif;
+  letter-spacing: 0.5px;
+  color: #562b7a;
+  text-transform: uppercase;
+  font-size: 22px;
+}
+
+/* 🧩 Card layout */
+.add-form,
+.cooldown,
+ul,
+.controls {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ✍️ Inputs */
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #d6ece6;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #743aaf;
+}
+
+/* 🧘 Add form grid */
+.add-form {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px;
+  gap: 10px;
+}
+
+.add-form button {
+  grid-column: span 3;
+}
+
+/* 🔘 Buttons */
+button {
+  background: #9b3aaf;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  background: #692b7a;
+}
+
+/* 🛑 Stop button */
+.stop {
+  background: #de3d3d;
+}
+
+.stop:hover {
+  background: #9c2525;
+}
+
+/* 📜 List */
+ul {
+  list-style: none;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f3faf8;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* ❌ Delete button */
+li button {
+  background: transparent;
+  color: #cf3131;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  font-size: 18px;
+  padding: 0;
+}
+
+/* ▶ Controls */
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+.controls button {
+  flex: 1;
+  font-size: 16px;
+}
+
+/* ⏱ Current session */
+#current {
+  margin-top: 20px;
+  font-size: 22px;
+  color: #4d2b7a;
+}
+
+/* 🧘 Timer */
+#timer {
+  font-family: "DM Sans", sans-serif;
+  font-size: 64px;
+  margin-top: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #2a1729;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 🌙 Meditation Mode */
+.meditation {
+  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+  color: #ffffff;
+  background: linear-gradient(180deg, #0b0b0b, #1a1a1a);
+}
+
+.meditation h2 {
+  display: none;
+}
+
+.meditation #current {
+  font-size: 28px;
+  color: #d1f7f2;
+}
+
+.meditation #timer {
+  font-size: 90px;
+  color: #ffffff;
+}
+
+.meditation .add-form,
+.meditation ul,
+.meditation .cooldown,
+.meditation .controls button:not(.stop) {
+  display: none;
+}
+
+/* 📱 Mobile spacing */
+@media (max-width: 480px) {
+  #timer {
+    font-size: 54px;
+  }
+}
