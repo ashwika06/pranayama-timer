@@ -164,22 +164,32 @@ function playShortBell() {
   const bell = document.getElementById("shortBell");
   if (!bell) return;
 
+  bell.pause();
   bell.currentTime = 0;
-  bell.play().catch(() => {});
 
-  setTimeout(() => {
-    bell.pause();
-    bell.currentTime = 0;
-  }, 1500);
+  const playPromise = bell.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      console.warn("Short bell blocked:", err);
+    });
+  }
 }
+
 
 /* 🎉 Long finish sound */
 function playFinishSound() {
   const sound = document.getElementById("finishSound");
   if (!sound) return;
 
+  sound.pause();
   sound.currentTime = 0;
-  sound.play().catch(() => {});
+
+  const playPromise = sound.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      console.warn("Finish sound blocked:", err);
+    });
+  }
 }
 
 /* 🛑 Stop all sounds */
@@ -189,6 +199,7 @@ function stopAllSounds() {
     audio.currentTime = 0;
   });
 }
+
 
 /* =========================
    Meditation Mode
