@@ -159,7 +159,7 @@ function formatTime(sec) {
   return `${m}:${s}`;
 }
 
-/* 🔔 Short beep (1–2 seconds) */
+/* 🔔 Short beep */
 function playShortBell() {
   const bell = document.getElementById("shortBell");
   if (!bell) return;
@@ -170,10 +170,10 @@ function playShortBell() {
   setTimeout(() => {
     bell.pause();
     bell.currentTime = 0;
-  }, 1500); // 👈 1.5 seconds
+  }, 1500);
 }
 
-/* 🎉 Long finish sound (stops only on STOP) */
+/* 🎉 Long finish sound */
 function playFinishSound() {
   const sound = document.getElementById("finishSound");
   if (!sound) return;
@@ -182,7 +182,7 @@ function playFinishSound() {
   sound.play().catch(() => {});
 }
 
-/* 🛑 Stop ALL sounds immediately */
+/* 🛑 Stop all sounds */
 function stopAllSounds() {
   document.querySelectorAll("audio").forEach(audio => {
     audio.pause();
