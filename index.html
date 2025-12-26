@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pranayama Timer</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="pranayama.css">
+  <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ffffff">
 </head>
+
 <body>
 
 <h2>Pranayama Timer</h2>
@@ -36,9 +38,12 @@
 
 <h3 id="current"></h3>
 <h1 id="timer"></h1>
-<div id="nextCountdown"></div> <!-- Live countdown display -->
+<div id="nextCountdown"></div>
 
+<!-- Sounds -->
 <audio id="bell" src="https://actions.google.com/sounds/v1/alarms/medium_bell_ringing_near.ogg"></audio>
+<audio id="finishSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+
 <script src="app.js"></script>
 </body>
 </html>

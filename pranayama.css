@@ -23,6 +23,7 @@ h2 {
   color: #562b7a;
   text-transform: uppercase;
   font-size: 22px;
+  margin-bottom: 20px;
 }
 
 /* 🧩 Card layout */
@@ -72,11 +73,10 @@ button {
   border: none;
   border-radius: 14px;
   padding: 12px;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
-  font-size: 14px;
 }
 
 button:active {
@@ -100,6 +100,7 @@ button:hover {
 /* 📜 List */
 ul {
   list-style: none;
+  padding: 0;
 }
 
 li {
@@ -113,6 +114,12 @@ li {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.2px;
+}
+
+/* ✅ Active / current Pranayama */
+li.active {
+  background: #d6c1f0;
+  font-weight: 700;
 }
 
 /* ❌ Delete button */
@@ -130,6 +137,7 @@ li button {
 .controls {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .controls button {
@@ -142,6 +150,7 @@ li button {
   margin-top: 20px;
   font-size: 22px;
   color: #4d2b7a;
+  text-align: center;
 }
 
 /* 🧘 Timer */
@@ -153,13 +162,22 @@ li button {
   letter-spacing: 1px;
   color: #2a1729;
   font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* 🌟 Next Countdown / Next Pranayama */
+#nextCountdown,
+#nextPranayama {
+  margin-top: 6px;
+  font-size: 18px;
+  text-align: center;
+  color: #562b7a;
 }
 
 /* 🌙 Meditation Mode */
 .meditation {
-  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
-  color: #ffffff;
   background: linear-gradient(180deg, #0b0b0b, #1a1a1a);
+  color: #ffffff;
 }
 
 .meditation h2 {
@@ -187,5 +205,9 @@ li button {
 @media (max-width: 480px) {
   #timer {
     font-size: 54px;
+  }
+
+  .add-form {
+    grid-template-columns: 1fr 70px 70px;
   }
 }

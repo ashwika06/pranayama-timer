@@ -4,7 +4,7 @@
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
     .then(() => console.log("Service Worker registered"))
-    .catch(err => console.error("Service Worker registration failed:", err));
+    .catch(err => console.error("SW failed:", err));
 }
 
 /* =========================
@@ -16,7 +16,7 @@ let timerInterval = null;
 let isStopped = false;
 
 /* =========================
-   Load / Save Data
+   Load / Save
 ========================= */
 function saveData() {
   localStorage.setItem("pranayamas", JSON.stringify(pranayamas));
@@ -30,7 +30,7 @@ function loadData() {
   }
 }
 
-window.onload = loadData;
+document.addEventListener("DOMContentLoaded", loadData);
 
 /* =========================
    Add / Delete
@@ -39,11 +39,11 @@ function addPranayama() {
   const name = document.getElementById("name").value.trim();
   const min = parseInt(document.getElementById("min").value || 0);
   const sec = parseInt(document.getElementById("sec").value || 0);
-  const totalSeconds = min * 60 + sec;
+  const total = min * 60 + sec;
 
-  if (!name || totalSeconds <= 0) return;
+  if (!name || total <= 0) return;
 
-  pranayamas.push({ name, duration: totalSeconds });
+  pranayamas.push({ name, duration: total });
   saveData();
   renderList();
 
@@ -62,11 +62,11 @@ function renderList() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  pranayamas.forEach((p, index) => {
+  pranayamas.forEach((p, i) => {
     const li = document.createElement("li");
     li.innerHTML = `
       ${p.name} – ${formatTime(p.duration)}
-      <button onclick="deletePranayama(${index})">❌</button>
+      <button onclick="deletePranayama(${i})">❌</button>
     `;
     list.appendChild(li);
   });
@@ -76,17 +76,19 @@ function renderList() {
    Session Control
 ========================= */
 function startSession() {
+  stopAllSounds();
   if (pranayamas.length === 0) return;
 
   isStopped = false;
   cooldownTime = parseInt(document.getElementById("cooldown").value || 0);
-  saveData();
   runPranayama(0);
 }
 
 function stopSession() {
   isStopped = true;
   clearInterval(timerInterval);
+  stopAllSounds();
+
   document.getElementById("current").textContent = "Stopped";
   document.getElementById("timer").textContent = "";
   document.getElementById("nextCountdown").textContent = "";
@@ -102,16 +104,18 @@ function runPranayama(index) {
     document.getElementById("current").textContent = "Session Complete 🙏";
     document.getElementById("timer").textContent = "";
     document.getElementById("nextCountdown").textContent = "";
-    playBell();
+    playFinishSound();
     return;
   }
 
   document.getElementById("current").textContent = pranayamas[index].name;
 
   startTimer(pranayamas[index].duration, () => {
-    if (index < pranayamas.length - 1) {
+    playBell(5000);
+
+    if (index < pranayamas.length - 1 && cooldownTime > 0) {
       document.getElementById("current").textContent = "Cooldown";
-      startTimer(cooldownTime, () => runPranayama(index + 1), true); // show live countdown
+      startTimer(cooldownTime, () => runPranayama(index + 1), true);
     } else {
       runPranayama(index + 1);
     }
@@ -125,32 +129,22 @@ function startTimer(seconds, callback, showNext = false) {
   let time = seconds;
   clearInterval(timerInterval);
 
-  if (seconds <= 0) {
-    callback();
-    return;
-  }
-
   timerInterval = setInterval(() => {
     if (isStopped) {
       clearInterval(timerInterval);
       return;
     }
 
-    const timeStr = formatTime(time);
-    document.getElementById("timer").textContent = timeStr;
-
-    // Show live countdown if required
-    if (showNext) {
-      document.getElementById("nextCountdown").textContent = `Next in: ${timeStr}`;
-    } else {
-      document.getElementById("nextCountdown").textContent = "";
-    }
+    const t = formatTime(time);
+    document.getElementById("timer").textContent = t;
+    document.getElementById("nextCountdown").textContent =
+      showNext ? `Next in: ${t}` : "";
 
     time--;
 
     if (time < 0) {
       clearInterval(timerInterval);
-      notifyEnd();
+      document.getElementById("nextCountdown").textContent = "";
       callback();
     }
   }, 1000);
@@ -165,13 +159,27 @@ function formatTime(sec) {
   return `${m}:${s}`;
 }
 
-function notifyEnd() {
-  playBell();
+function playBell(duration = 5000) {
+  const bell = document.getElementById("bell");
+  bell.currentTime = 0;
+  bell.play().catch(() => {});
+  setTimeout(() => {
+    bell.pause();
+    bell.currentTime = 0;
+  }, duration);
 }
 
-function playBell() {
-  const bell = document.getElementById("bell");
-  if (bell) bell.play().catch(() => {});
+function playFinishSound() {
+  const sound = document.getElementById("finishSound");
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+}
+
+function stopAllSounds() {
+  document.querySelectorAll("audio").forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
 }
 
 /* =========================

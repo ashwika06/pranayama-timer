@@ -1,4 +1,5 @@
-const CACHE_NAME = "pranayama-v1";
+const CACHE = "pranayama-v1";
+
 const FILES = [
   "./",
   "./index.html",
@@ -9,7 +10,7 @@ const FILES = [
 
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES))
+    caches.open(CACHE).then(cache => cache.addAll(FILES))
   );
 });
 
