@@ -111,7 +111,7 @@ function runPranayama(index) {
   document.getElementById("current").textContent = pranayamas[index].name;
 
   startTimer(pranayamas[index].duration, () => {
-    playBell(5000);
+    playShortBell();
 
     if (index < pranayamas.length - 1 && cooldownTime > 0) {
       document.getElementById("current").textContent = "Cooldown";
@@ -159,26 +159,34 @@ function formatTime(sec) {
   return `${m}:${s}`;
 }
 
-function playBell(duration = 5000) {
-  const bell = document.getElementById("bell");
+/* 🔔 Short beep (1–2 seconds) */
+function playShortBell() {
+  const bell = document.getElementById("shortBell");
+  if (!bell) return;
+
   bell.currentTime = 0;
   bell.play().catch(() => {});
+
   setTimeout(() => {
     bell.pause();
     bell.currentTime = 0;
-  }, duration);
+  }, 1500); // 👈 1.5 seconds
 }
 
+/* 🎉 Long finish sound (stops only on STOP) */
 function playFinishSound() {
   const sound = document.getElementById("finishSound");
+  if (!sound) return;
+
   sound.currentTime = 0;
   sound.play().catch(() => {});
 }
 
+/* 🛑 Stop ALL sounds immediately */
 function stopAllSounds() {
-  document.querySelectorAll("audio").forEach(a => {
-    a.pause();
-    a.currentTime = 0;
+  document.querySelectorAll("audio").forEach(audio => {
+    audio.pause();
+    audio.currentTime = 0;
   });
 }
 
